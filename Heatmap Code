@@ -1,10 +1,8 @@
 import plotly.plotly as py
 import plotly.graph_objs as go
-import os
 import pandas as pd
 
 # find and open file
-os.chdir('/Users/timarthur/Documents')
 df = pd.read_csv('bioreactor_3_gradproj.csv') 
 
 #sorting by abundance
@@ -13,7 +11,7 @@ OTU_ID = list(df['OTU_ID'])
 
 # shorten names
 shorter_OTU_ID = []
-for string in OTU_ID[:len(OTU_ID)]:
+for string in OTU_ID:
     start_pos = string.find('g__')
     end_pos = string.find(';s__')
     shorter_OTU_ID.append(string[start_pos:end_pos])
