@@ -1,0 +1,40 @@
+import plotly.plotly as py
+import plotly.graph_objs as go
+import os
+import pandas as pd
+
+# find and open file
+os.chdir('/Users/timarthur/Documents')
+df = pd.read_csv('bioreactor_3_gradproj.csv') 
+
+#sorting by abundance
+df = df.query('t19 > 100')
+OTU_ID = list(df['OTU_ID'])
+
+# shorten names
+shorter_OTU_ID = []
+for string in OTU_ID[:len(OTU_ID)]:
+    start_pos = string.find('g__')
+    end_pos = string.find(';s__')
+    shorter_OTU_ID.append(string[start_pos:end_pos])
+
+# making dataframe and list2 of days 
+col_names = list(df.columns)
+data_per_date = []
+for col_name in col_names[1:]:
+  data_per_date.append(df[col_name])
+
+# generating heatmap
+trace = go.Heatmap(z = data_per_date,\
+                   x = shorter_OTU_ID,\
+                   y = col_names[1:])
+data = [trace]
+layout = go.Layout(title = 'Bioreactor Timecourse OTU Heatmap',\
+                   xaxis = dict(title = 'Bacterial Genus'),\
+                    yaxis = dict(title = 'Day of Sample Collection'),\
+                    margin = go.Margin(
+                            b=125))
+figure = go.Figure(data=data, layout=layout)
+py.iplot(figure, filename = 'OTU Heatmap')
+
+
